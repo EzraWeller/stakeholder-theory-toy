@@ -1,0 +1,7 @@
+[package]
+name = "stakeholder_theory"
+version = "0.1.0"
+authors = ["ezra"]
+edition = "2018"
+
+[dependencies]
