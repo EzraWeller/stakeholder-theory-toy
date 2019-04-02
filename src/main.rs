@@ -17,34 +17,30 @@ fn main() {
     }
 }
 
-// the three strategies
-    // 1. founder-owned
-        // owned by employees
-        // will do what leads to highest wages
+// ****** THIS ONE ******
+// make all three -literally- start the same way by skipping to an identical (successful) snapshot, except that
+// their ownership structures are different, and so they make different choices. Selling shares is no longer an option,
+// because we assume all the shares have already been sold.
+// ****** THIS ONE ******
 
-    // 2. shareholder-owned
-        // (doesn't start as shareholder-owned: sells shares to become that way)
-        // owned by a mix of employees and shareholders
-        // will do what leads to highest wages and share price (depending on ownership breakdown)
+    // employee-owned
+        // 50% raise wages, 50% raise usefulness (indirect way to raise wages) when not in danger
+        // when in danger, respond to the danger
+            // (raise wages if in danger of losing employees, raise usefulness if in danger of losing customers)
+    // shareholder-owned
+        // 50% pump share price, 50% raise usefulness (indirect way to raise share price) when not in danger
+        // when in danger, respond to the danger
+    // stakeholder-owned
+        // 100% raise usefulness when not in danger
+        // when in danger, respond to the danger
 
-    // 3. stakeholder-owned
-        // owned by a mix of employees, shareholders, and users
-        // will do what leads to highest wages, share price, and user preference-fulfillment 
-        // (depending on ownership breakdown) 
+    // 'safe' means that the firm checks its ability to profit and its ability to keep its customers and employees 
+    // (they aren't in danger of being taken by other firms)
 
-// decision-flow:
-    // present a choice
-    // look at ownership
-    // decide what to do
-
-// initial choice: set the parameters of firm.play_round()
-    // 
-
-// we cooooould try instead of a head to head competition, a "time trial" where the different strategies race to sell to the whole market
-    // the advantage is that it would be much easier to program the strategies
-    // but, does it really prove the point?
-
-// recording playthroughs and pitting them against each other doesn't work, because interactions change depending on the other players dynamically
+    // we can do this by adding a function that compares the usefulness, servings, and wage_amount of firm X's last turn to
+    // to those of the other firms on the last turn, and checking users_left and workers_left on the last turn:
+    // if other firms' usefulness or servings were close to or greater than X's AND there weren't many users left, DANGER
+    // if other firms' wage_amount were close to or greater than X's AND there weren't many workers left, DANGER
 
 pub fn new_market(labor_s: u32, minimum_w: u32, users_: u32, min_u: u32) -> Market {
     Market {
@@ -138,7 +134,7 @@ impl Market {
 
     // the following five functions are run at the end of every round (in this order)
 
-    pub fn sell_goods(mut self) -> Market {
+    pub fn sell_goods(mut self) -> Market { // rename??
         // reads the usefulness created by each firm the previous round and has users buy the most useful products
         // assumes each user has a standard ideal usefulness (e.g. each person wants exactly one car, but the best car)
         // firms that created more usefulness will get more customers
@@ -149,6 +145,10 @@ impl Market {
         let mut firms: Vec<(usize, Firm)> = self.clone().firms.into_iter().map(|f| { c += 1; (c, f) }).collect();
         firms.sort_by(|a, b| b.1.usefulness.cmp(&a.1.usefulness));
         for firm_data in firms {
+            // self.firms[firm_data.0 - 1].sell_goods(); ??
+            // self.firms[firm_data.0 - 1].pay_employees(); ??
+            // self.firms[firm_data.0 - 1].set_share_prices(); ??
+            // self.firms[firm_data.0 - 1].sell_shares(); ??
             self.firms[firm_data.0 - 1].previous_funds.insert(0, firm_data.1.current_funds.clone());
             let usefulness: u32 = self.firms[firm_data.0 - 1].usefulness.clone();
             let servings: u32 = self.firms[firm_data.0 - 1].servings.clone();
@@ -233,6 +233,7 @@ impl Market {
         let mut firms: Vec<(usize, Firm)> = self.clone().firms.into_iter().map(|f| { c += 1; (c, f) }).collect();
         firms.sort_by(|a, b| b.1.wage_amount.cmp(&a.1.wage_amount));
         for firm_data in firms {
+            // self.firms[firm_data.0 - 1].recruit_employees(); ??
             let wage_amount: u32 = self.firms[firm_data.0 - 1].wage_amount.clone();
             let number_to_hire: u32 = self.firms[firm_data.0 - 1].number_to_hire.clone();
             if wage_amount >= self.min_wage {
