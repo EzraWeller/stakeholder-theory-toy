@@ -1,1 +1,1 @@
-/Users/ezra/workspace/stakeholder-theory-toy/target/debug/stakeholder_theory.dSYM: /Users/ezra/workspace/stakeholder-theory-toy/src/main.rs
+/mnt/d/DocumentsD/Programming/EzraWeller/Projects/stakeholder_theory/target/debug/stakeholder_theory: /mnt/d/DocumentsD/Programming/EzraWeller/Projects/stakeholder_theory/src/main.rs
